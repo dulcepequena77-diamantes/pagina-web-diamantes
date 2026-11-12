@@ -113,9 +113,10 @@
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
-  function productCard(p) {
+  function productCard(p, editable) {
     const img = p.imageUrl || "assets/logo.png";
     const logo = p.sellerLogo ? `<img src="${escapeHtml(p.sellerLogo)}" alt="" style="width:18px;height:18px;border-radius:50%;vertical-align:middle;margin-right:4px" />` : "";
+    const editBtn = editable ? `<button class="btn btn-sm btn-outline" data-edit="${p.id}" style="margin-top:6px">Editar</button>` : "";
     return `
       <article class="product-card" data-id="${p.id}">
         <div class="product-img" data-src="${escapeHtml(img)}" style="background-image:url('${escapeHtml(img)}');cursor:pointer"></div>
@@ -123,8 +124,9 @@
           <span class="product-cat">${escapeHtml(p.category)}</span>
           <h3>${escapeHtml(p.title)}</h3>
           <p class="product-price">${formatPrice(p.price)}</p>
+          <p class="muted">Stock: ${p.stock != null ? p.stock : "—"}</p>
           <p class="product-seller">${logo}por ${escapeHtml(p.sellerName || "vendedor")}</p>
-          <button class="btn btn-sm btn-outline" data-add="${p.id}" style="margin-top:6px">Agregar al carrito</button>
+          ${editable ? editBtn : `<button class="btn btn-sm btn-outline" data-add="${p.id}" style="margin-top:6px">Agregar al carrito</button>`}
           <a href="#product?id=${p.id}" class="card-link">Ver detalle &rarr;</a>
         </div>
       </article>`;
@@ -286,7 +288,7 @@
       <div class="stat-box"><span class="stat-num">${myOrders.length}</span><span class="stat-label">Ventas</span></div>
       <div class="stat-box"><span class="stat-num">${formatPrice(totalNet)}</span><span class="stat-label">Ganancia neta</span></div>`;
     // my products
-    $("#myProducts").innerHTML = myProducts.length ? myProducts.map(productCard).join("") : "<p class='empty'>Aún no tienes productos.</p>";
+    $("#myProducts").innerHTML = myProducts.length ? myProducts.map(p => productCard(p, true)).join("") : "<p class='empty'>Aún no tienes productos.</p>";
     // my sales
     const salesEl = $("#mySales");
     if (!myOrders.length) { salesEl.innerHTML = "<p class='empty'>Sin ventas aún.</p>"; }
@@ -768,6 +770,53 @@
       location.hash = "#home";
     });
   }
+  // ---------- Edit product ----------
+  let currentEditId = null;
+  async function openEditModal(id) {
+    const p = await Data.getProduct(id);
+    if (!p) return;
+    currentEditId = id;
+    $("#editTitle").value = p.title || "";
+    $("#editCategory").value = p.category || "";
+    $("#editPrice").value = p.price || "";
+    $("#editStock").value = p.stock != null ? p.stock : "";
+    $("#editDesc").value = p.description || "";
+    $("#editImage").value = p.imageUrl || "";
+    $("#editMsg").textContent = "";
+    const m = $("#editModal");
+    if (m) m.style.display = "flex";
+  }
+  const editClose = $("#editClose");
+  if (editClose) editClose.addEventListener("click", () => { $("#editModal").style.display = "none"; currentEditId = null; });
+  const editModal = $("#editModal");
+  if (editModal) editModal.addEventListener("click", (e) => { if (e.target.id === "editModal") { editModal.style.display = "none"; currentEditId = null; } });
+  const editForm = $("#editForm");
+  if (editForm) {
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = $("#editMsg");
+      if (!currentEditId) return;
+      try {
+        await Data.updateProduct(currentEditId, {
+          title: $("#editTitle").value.trim(),
+          category: $("#editCategory").value,
+          price: Number($("#editPrice").value),
+          stock: Number($("#editStock").value),
+          description: $("#editDesc").value.trim(),
+          imageUrl: $("#editImage").value.trim(),
+        });
+        msg.textContent = "Producto actualizado.";
+        $("#editModal").style.display = "none";
+        currentEditId = null;
+        loadDashboard();
+      } catch (err) { msg.textContent = err.message; }
+    });
+  }
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-edit]");
+    if (btn) openEditModal(btn.dataset.edit);
+  });
+
   Data.init().then(() => {
     Data.onAuthChange(refreshAuthUI);
     route();
