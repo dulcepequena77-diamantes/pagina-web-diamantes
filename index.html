@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diamantes — Marketplace C2C</title>
+  <meta name="description" content="Diamantes: marketplace C2C. Crea tu cuenta, publica tus productos y gana dejando una comisión a la plataforma." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <img src="assets/logo.png" alt="Diamantes logo" class="brand-logo" />
+        <span class="brand-name">Diamantes</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#home">Inicio</a>
+        <a href="#marketplace">Marketplace</a>
+        <a href="nuestra-idea.html">Nuestra idea</a>
+        <a href="#sell">Vender</a>
+        <a href="#dashboard" id="navDashboard" style="display:none">Mi panel <span id="notifCount" class="badge" style="display:none">0</span></a>
+        <a href="#admin" id="navAdmin" style="display:none">Admin</a>
+      </nav>
+      <div class="header-actions">
+        <button id="themeToggle" class="btn btn-outline btn-sm" aria-label="Cambiar tema">🌙</button>
+        <span id="userBadge" class="user-badge" style="display:none"></span>
+        <a href="#cart" id="btnCart" class="btn btn-outline btn-sm">🛒 <span id="cartCount">0</span></a>
+        <a href="#login" id="btnLogin" class="btn btn-outline btn-sm">Iniciar sesión</a>
+        <a href="#register" id="btnRegister" class="btn btn-gold btn-sm">Crear cuenta</a>
+        <button id="btnLogout" class="btn btn-outline btn-sm" style="display:none">Salir</button>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menú">&#9776;</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="view" id="view-home">
+      <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+          <img src="assets/logo.png" alt="Diamantes" class="hero-logo" />
+          <h1 class="hero-title-cursive">Diamantes</h1>
+          <p>Crea tu cuenta, publica tus productos y gana. La plataforma retiene una comisión por cada venta.</p>
+          <div class="hero-actions">
+            <a href="#marketplace" class="btn btn-gold">Explorar productos</a>
+            <a href="#register" class="btn btn-outline">Crear cuenta y vender</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-3">
+          <div class="feature-box">
+            <h3>1. Crea tu cuenta</h3>
+            <p>Regístrate gratis como comprador o vendedor en segundos.</p>
+          </div>
+          <div class="feature-box">
+            <h3>2. Publica tus productos</h3>
+            <p>Sube fotos, descripción y precio. Tu tienda personal en la plataforma.</p>
+          </div>
+          <div class="feature-box">
+            <h3>3. Vende y gana</h3>
+            <p>La plataforma retiene una comisión del <strong>10%</strong> por venta; el resto es tuyo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-dark">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Destacados</span>
+            <h2>Productos recientes</h2>
+          </div>
+          <div class="product-grid" id="homeFeatured"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- MARKETPLACE -->
+    <section class="view" id="view-marketplace" style="display:none">
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Marketplace</span>
+            <h2>Todos los productos</h2>
+          </div>
+          <div class="filters">
+            <input type="search" id="searchInput" placeholder="Buscar productos..." />
+            <select id="categoryFilter">
+              <option value="">Todas las categorías</option>
+              <option value="anillos">Anillos</option>
+              <option value="collares">Collares</option>
+              <option value="pulseras">Pulseras</option>
+              <option value="aretes">Aretes</option>
+              <option value="bolsos">Bolsos</option>
+              <option value="carteras">Carteras</option>
+              <option value="ropa-dama">Ropa para dama</option>
+              <option value="ropa-caballero">Ropa para caballero</option>
+              <option value="ropa-nino">Ropa para niño</option>
+              <option value="otros">Otros</option>
+            </select>
+            <select id="sortFilter">
+              <option value="newest">Más recientes</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+            </select>
+          </div>
+          <div class="product-grid" id="marketplaceGrid"></div>
+          <p class="empty" id="marketplaceEmpty" style="display:none">No hay productos que coincidan.</p>
+        </div>
+      </section>
+    </section>
+
+    <!-- PRODUCT DETAIL -->
+    <section class="view" id="view-product" style="display:none">
+      <section class="section">
+        <div class="container" id="productDetail"></div>
+      </section>
+    </section>
+
+    <!-- SELL / HOW -->
+    <section class="view" id="view-sell" style="display:none">
+      <section class="section">
+        <div class="container grid-2">
+          <div>
+            <span class="eyebrow">Vender</span>
+            <h2>Publica tus productos</h2>
+            <p>Cualquier usuario registrado puede publicar productos. La plataforma retiene una comisión del <strong>10%</strong> por cada venta realizada; el <strong>90%</strong> restante es para el vendedor.</p>
+            <ul class="features">
+              <li>✔ Registro gratuito</li>
+              <li>✔ Publicación ilimitada</li>
+              <li>✔ Panel con ventas y comisiones</li>
+              <li>✔ Pagos rastreados</li>
+            </ul>
+            <a href="#dashboard" class="btn btn-gold" id="goDashboard">Ir a mi panel</a>
+          </div>
+          <div class="sell-cta">
+            <img src="assets/logo.png" alt="Diamantes" />
+          </div>
+        </div>
+      </section>
+
+     <!-- Categorias -->
+     <section class="section">
+       <div class="container">
+         <div class="section-head">
+           <span class="eyebrow">Categorias</span>
+           <h2>Publica tus productos por categoria</h2>
+         </div>
+         <div class="category-grid" id="sellCategories" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">
+           <button type="button" class="cat-card" data-cat="anillos">Anillos</button>
+           <button type="button" class="cat-card" data-cat="collares">Collares</button>
+           <button type="button" class="cat-card" data-cat="pulseras">Pulseras</button>
+           <button type="button" class="cat-card" data-cat="aretes">Aretes</button>
+           <button type="button" class="cat-card" data-cat="bolsos">Bolsos</button>
+           <button type="button" class="cat-card" data-cat="carteras">Carteras</button>
+           <button type="button" class="cat-card" data-cat="ropa-dama">Ropa para dama</button>
+           <button type="button" class="cat-card" data-cat="ropa-caballero">Ropa para caballero</button>
+           <button type="button" class="cat-card" data-cat="ropa-nino">Ropa para niño</button>
+           <button type="button" class="cat-card" data-cat="otros">Otros</button>
+         </div>
+       </div>
+     </section>
+
+     <!-- Formulario de publicacion -->
+     <section class="section">
+       <div class="container auth-box" style="max-width:640px">
+         <h2>Publicar nuevo producto</h2>
+         <form id="sellProductForm" class="auth-form">
+           <input type="text" id="sellTitle" placeholder="Titulo" required />
+           <select id="sellCategory" required>
+             <option value="">Categoria</option>
+             <option value="anillos">Anillos</option>
+             <option value="collares">Collares</option>
+             <option value="pulseras">Pulseras</option>
+             <option value="aretes">Aretes</option>
+             <option value="bolsos">Bolsos</option>
+             <option value="carteras">Carteras</option>
+             <option value="ropa-dama">Ropa para dama</option>
+             <option value="ropa-caballero">Ropa para caballero</option>
+             <option value="ropa-nino">Ropa para niño</option>
+             <option value="otros">Otros</option>
+           </select>
+           <input type="number" id="sellPrice" placeholder="Precio (COP)" required min="1" step="0.01" />
+           <input type="number" id="sellStock" placeholder="Cantidad disponible" required min="1" step="1" />
+           <textarea id="sellDesc" placeholder="Descripcion" rows="3" required></textarea>
+           <input type="url" id="sellImage" placeholder="URL de imagen (opcional)" />
+           <input type="file" id="sellFile" accept="image/*" />
+           <div id="sellImagePreview" style="margin:8px 0"></div>
+           <button type="submit" class="btn btn-gold">Publicar</button>
+           <p class="form-msg" id="sellMsg"></p>
+         </form>
+       </div>
+     </section>
+    </section>
+
+    <!-- AUTH: LOGIN -->
+    <section class="view" id="view-login" style="display:none">
+      <section class="section">
+        <div class="container auth-box">
+          <h2>Iniciar sesión</h2>
+          <form id="loginForm" class="auth-form">
+            <input type="email" id="loginEmail" placeholder="Correo" required />
+            <input type="password" id="loginPass" placeholder="Contraseña" required />
+            <button type="submit" class="btn btn-gold">Iniciar sesión</button>
+            <p class="form-msg" id="loginMsg"></p>
+          </form>
+          <p class="auth-switch">¿No tienes cuenta? <a href="#register">Crear cuenta</a></p>
+        </div>
+      </section>
+    </section>
+
+    <!-- AUTH: REGISTER -->
+    <section class="view" id="view-register" style="display:none">
+      <section class="section">
+        <div class="container auth-box">
+          <h2>Crear cuenta</h2>
+          <form id="registerForm" class="auth-form">
+            <input type="text" id="regName" placeholder="Nombre completo" required />
+            <input type="email" id="regEmail" placeholder="Correo" required />
+            <input type="password" id="regPass" placeholder="Contraseña (mín. 6)" required minlength="6" />
+            <button type="submit" class="btn btn-gold">Crear cuenta</button>
+            <p class="form-msg" id="regMsg"></p>
+          </form>
+          <p class="auth-switch">¿Ya tienes cuenta? <a href="#login">Iniciar sesión</a></p>
+        </div>
+      </section>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard" style="display:none">
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Mi panel</span>
+            <h2 id="dashTitle">Vendedor</h2>
+            <button class="btn btn-outline btn-sm" id="dashLogout" style="margin-left:auto">Cerrar sesión</button>
+          </div>
+          <div class="stats grid-3" id="dashStats"></div>
+
+          <div class="dash-card" id="storeNameCard" style="margin-top:24px;display:none">
+            <h3>Nombre de tu tienda</h3>
+            <form id="storeNameForm" class="auth-form">
+              <input type="text" id="storeNameInput" placeholder="Ej: Joyas Diamantes" />
+              <button type="submit" class="btn btn-gold">Guardar nombre de tienda</button>
+              <p class="form-msg" id="storeNameMsg"></p>
+            </form>
+          </div>
+
+          <div class="dash-card" id="storeLogoCard" style="margin-top:24px;display:none">
+            <h3>Logo de tu tienda</h3>
+            <form id="storeLogoForm" class="auth-form">
+              <input type="file" id="storeLogoFile" accept="image/*" />
+              <div id="storeLogoPreview" style="margin:12px 0"></div>
+              <button type="submit" class="btn btn-gold">Guardar logo</button>
+              <p class="form-msg" id="storeLogoMsg"></p>
+            </form>
+          </div>
+
+          <div class="dash-grid">
+            <div class="dash-card">
+              <h3>Publicar nuevo producto</h3>
+              <form id="productForm" class="auth-form">
+                <input type="text" id="pTitle" placeholder="Título" required />
+                <select id="pCategory" required>
+                  <option value="">Categoría</option>
+                  <option value="anillos">Anillos</option>
+                  <option value="collares">Collares</option>
+                  <option value="pulseras">Pulseras</option>
+                  <option value="aretes">Aretes</option>
+                  <option value="bolsos">Bolsos</option>
+                  <option value="carteras">Carteras</option>
+                  <option value="ropa-dama">Ropa para dama</option>
+                  <option value="ropa-caballero">Ropa para caballero</option>
+                  <option value="ropa-nino">Ropa para niño</option>
+                  <option value="otros">Otros</option>
+                </select>
+                <input type="number" id="pPrice" placeholder="Precio (COP)" required min="1" step="0.01" />
+                <input type="number" id="pStock" placeholder="Cantidad disponible" required min="1" step="1" />
+                <textarea id="pDesc" placeholder="Descripción" rows="3" required></textarea>
+                <input type="url" id="pImage" placeholder="URL de imagen (opcional)" />
+                <input type="file" id="pFile" accept="image/*" />
+                <div id="pImagePreview" style="margin:8px 0"></div>
+                <button type="submit" class="btn btn-gold">Publicar</button>
+                <p class="form-msg" id="productMsg"></p>
+              </form>
+            </div>
+            <div class="dash-card">
+              <h3>Mis productos</h3>
+              <div id="myProducts" class="product-grid small"></div>
+            </div>
+          </div>
+
+          <div class="dash-card" style="margin-top:24px">
+            <h3>Mis ventas</h3>
+            <div id="mySales"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ADMIN / COMMISSIONS -->
+    <section class="view" id="view-admin" style="display:none">
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="eyebrow">Plataforma</span>
+            <h2>Comisiones y ventas</h2>
+          </div>
+          <div class="stats grid-3" id="adminStats"></div>
+          <div class="dash-card" style="margin-top:24px">
+            <h3>Historial de ventas</h3>
+            <div id="adminSales"></div>
+            <button class="btn btn-outline" id="clearOrdersBtn" style="margin-top:12px">Reiniciar pedidos</button>
+          </div>
+          <div class="dash-card" style="margin-top:24px">
+            <h3>Usuarios</h3>
+            <div id="adminUsers"></div>
+          </div>
+          <div class="dash-card" style="margin-top:24px">
+            <h3>Giros pendientes</h3>
+            <div id="adminPayouts"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Floating WhatsApp -->
+  <a class="whatsapp-float" href="https://wa.me/573228818536?text=Hola%20Diamantes%2C%20me%20interesa%20una%20pieza." target="_blank" rel="noopener" aria-label="Chat en WhatsApp">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.66 15l-1.18 4.3 4.4-1.15A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.13l-.29-.17-2.61.68.7-2.54-.19-.3A8 8 0 1 1 12 20zm4.4-5.9c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.4-1.33-1.64-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
+    <span class="whatsapp-tooltip">Chatea con nosotros</span>
+  </a>
+
+  <!-- Nosotros / Datos de contacto -->
+  <section class="section section-dark" id="nosotros-datos">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Nosotros</span>
+      </div>
+      <div class="about-text" style="max-width:800px;margin:0 auto 32px;text-align:center">
+        <p>
+          Diamantes es un marketplace C2C creado para unir a compradores y vendedores,
+          abriendo un espacio comercial para productores nacionales, emprendedores,
+          artesanos, pequeñas, medianas y grandes empresas, importadoras y comerciantes
+          nacionales que vean en nuestra página una ventana al comercio web.
+        </p>
+        <p>
+          Creemos en la transparencia, en la calidad y en el valor de lo artesanal y de lo
+          hecho en Colombia. Cada producto cuenta una historia que merece ser contada.
+        </p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <h3>Correo electrónico</h3>
+          <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=diamantesartesanias@gmail.com" target="_blank" rel="noopener">diamantesartesanias@gmail.com</a></p>
+        </div>
+        <div class="contact-item">
+          <h3>Número de teléfono</h3>
+          <p><a href="https://wa.me/573228818536" target="_blank" rel="noopener">+57 322 881 8536</a></p>
+        </div>
+        <div class="contact-item">
+          <h3>Ciudad</h3>
+          <p>Fusagasugá</p>
+        </div>
+        <div class="contact-item">
+          <h3>País</h3>
+          <p>Colombia</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <img src="assets/logo.png" alt="Diamantes" class="footer-logo" />
+      <p>&copy; <span id="year"></span> Diamantes Marketplace. Comisión plataforma: 10%.</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-2.25a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61595199278302" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M13 22v-8h3l1-4h-4V7.5c0-1.1.3-1.9 2-1.9h2.2V2.1C16.9 2 15.6 2 14.1 2 10.9 2 9 4 9 7.2V10H6v4h3v8h4z"/></svg>
+        </a>
+        <a href="https://wa.me/573228818536" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.66 15l-1.18 4.3 4.4-1.15A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.13l-.29-.17-2.61.68.7-2.54-.19-.3A8 8 0 1 1 12 20zm4.4-5.9c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.4-1.33-1.64-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.57.18 1.09.15 1.5.09.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok" title="TikTok">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.4 2 4.1 4.5 4.3v3.1c-1.7.1-3.2-.4-4.5-1.3v6.4a6.5 6.5 0 1 1-5.6-6.4v3.2a3.3 3.3 0 1 0 2.4 3.2V3h3.2z"/></svg>
+        </a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=diamantesartesanias@gmail.com" target="_blank" rel="noopener" aria-label="Correo" title="Enviar correo">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6zm2 0l8 5 8-5H4zm16 2.24l-8 5-8-5V18h16V8.24z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <!-- Lightbox -->
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center;padding:20px">
+    <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 0 20px #000" />
+    <button id="lightboxClose" style="position:absolute;top:20px;right:28px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer">&times;</button>
+  </div>
+
+  <!-- Cart modal -->
+  <div id="cartModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:20px;position:relative">
+      <button id="cartClose" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text);font-size:1.6rem;cursor:pointer">&times;</button>
+      <h2>Carrito de compras</h2>
+      <div id="cartItems"></div>
+      <p id="cartTotal" style="margin-top:12px;font-weight:600"></p>
+      <button class="btn btn-gold" id="cartCheckout" style="margin-top:12px">Pagar todo (demo)</button>
+      <p class="form-msg" id="cartMsg"></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
