@@ -424,6 +424,36 @@
     </div>
   </div>
 
+  <!-- Edit product modal -->
+  <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:20px;position:relative">
+      <button id="editClose" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text);font-size:1.6rem;cursor:pointer">&times;</button>
+      <h2>Editar producto</h2>
+      <form id="editForm" class="auth-form">
+        <input type="text" id="editTitle" placeholder="Título" required />
+        <select id="editCategory" required>
+          <option value="">Categoría</option>
+          <option value="anillos">Anillos</option>
+          <option value="collares">Collares</option>
+          <option value="pulseras">Pulseras</option>
+          <option value="aretes">Aretes</option>
+          <option value="bolsos">Bolsos</option>
+          <option value="carteras">Carteras</option>
+          <option value="ropa-dama">Ropa para dama</option>
+          <option value="ropa-caballero">Ropa para caballero</option>
+          <option value="ropa-nino">Ropa para niño</option>
+          <option value="otros">Otros</option>
+        </select>
+        <input type="number" id="editPrice" placeholder="Precio (COP)" required min="1" step="0.01" />
+        <input type="number" id="editStock" placeholder="Cantidad disponible" required min="0" step="1" />
+        <textarea id="editDesc" placeholder="Descripción" rows="3" required></textarea>
+        <input type="url" id="editImage" placeholder="URL de imagen (opcional)" />
+        <button type="submit" class="btn btn-gold">Guardar cambios</button>
+        <p class="form-msg" id="editMsg"></p>
+      </form>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/data.js"></script>
