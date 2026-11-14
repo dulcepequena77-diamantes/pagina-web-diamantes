@@ -78,6 +78,17 @@
             { id: "p_dulce_1", title: "Collar de perlas", category: "collares", price: 120000, stock: 3, description: "Collar de perlas naturales.", imageUrl: "assets/banner.jpg" },
             { id: "p_dulce_2", title: "Bolso artesanal", category: "bolsos", price: 95000, stock: 4, description: "Bolso tejido a mano.", imageUrl: "assets/foto.jpg" },
           ];
+          const products = local.products();
+          let changed = false;
+          // update existing
+          for (const s of sample) {
+            const idx = products.findIndex(p => p.id === s.id);
+            if (idx >= 0) {
+              if (!products[idx].imageUrl) { products[idx].imageUrl = s.imageUrl; changed = true; }
+              if (!products[idx].sellerLogo) { products[idx].sellerLogo = dulce.storeLogo || "assets/logo.png"; changed = true; }
+            }
+          }
+          // add missing
           const toAdd = sample.filter(p => !existingIds.has(p.id)).map(p => ({
             ...p,
             sellerId: dulce.id,
@@ -87,9 +98,10 @@
             createdAt: Date.now(),
           }));
           if (toAdd.length) {
-            const products = [...toAdd, ...local.products()];
-            local.setProducts(products);
+            products.unshift(...toAdd);
+            changed = true;
           }
+          if (changed) local.setProducts(products);
         }
         if (s) {
           const u = local.users().find(x => x.id === s.id);
