@@ -69,24 +69,25 @@
           users.push({ id: "u_dulce", name: "Dulce", email: "dulcepequena77@gmail.com", password: await hashPass("dulce2026"), seller: true, admin: false, storeName: "Dulce Artesanías", storeLogo: "", createdAt: Date.now() });
           local.setUsers(users);
         }
-        // Seed sample products for Dulce if none
-        if (!local.products().length) {
-          const dulce = local.users().find(u => u.email === "dulcepequena77@gmail.com");
-          if (dulce) {
-            const sample = [
-              { title: "Anillo de plata", category: "anillos", price: 80000, stock: 5, description: "Anillo artesanal en plata.", imageUrl: "" },
-              { title: "Collar de perlas", category: "collares", price: 120000, stock: 3, description: "Collar de perlas naturales.", imageUrl: "" },
-              { title: "Bolso artesanal", category: "bolsos", price: 95000, stock: 4, description: "Bolso tejido a mano.", imageUrl: "" },
-            ];
-            const products = sample.map((p, i) => ({
-              id: "p_dulce_" + i,
-              ...p,
-              sellerId: dulce.id,
-              sellerName: dulce.storeName || dulce.name,
-              sellerLogo: dulce.storeLogo || "",
-              sellerEmail: dulce.email,
-              createdAt: Date.now() - i * 1000,
-            }));
+        // Seed sample products for Dulce if missing
+        const dulce = local.users().find(u => u.email === "dulcepequena77@gmail.com");
+        if (dulce) {
+          const existingIds = new Set(local.products().map(p => p.id));
+          const sample = [
+            { id: "p_dulce_0", title: "Anillo de plata", category: "anillos", price: 80000, stock: 5, description: "Anillo artesanal en plata.", imageUrl: "assets/foto.jpg" },
+            { id: "p_dulce_1", title: "Collar de perlas", category: "collares", price: 120000, stock: 3, description: "Collar de perlas naturales.", imageUrl: "assets/banner.jpg" },
+            { id: "p_dulce_2", title: "Bolso artesanal", category: "bolsos", price: 95000, stock: 4, description: "Bolso tejido a mano.", imageUrl: "assets/foto.jpg" },
+          ];
+          const toAdd = sample.filter(p => !existingIds.has(p.id)).map(p => ({
+            ...p,
+            sellerId: dulce.id,
+            sellerName: dulce.storeName || dulce.name,
+            sellerLogo: dulce.storeLogo || "assets/logo.png",
+            sellerEmail: dulce.email,
+            createdAt: Date.now(),
+          }));
+          if (toAdd.length) {
+            const products = [...toAdd, ...local.products()];
             local.setProducts(products);
           }
         }
